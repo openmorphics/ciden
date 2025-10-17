@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sr-ciden"
+version = "0.1.0"
+description = "Decoupled Continuous-Time Neuromorphic Library (C-IDEN with SR readout)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [{name = "The SR-CIDEN Authors", email = "oss@example.com"}]
+keywords = ["temporal point process", "neural ode", "neuromorphic", "spiking neural networks", "pytorch"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+  "torch>=2.1",
+  "numpy>=1.22",
+  "scipy>=1.9",
+  "matplotlib>=3.6",
+  "tqdm>=4.65",
+]
+
+[project.optional-dependencies]
+torchdiffeq = ["torchdiffeq>=0.2.3"]
+dev = ["pytest", "pytest-cov", "black", "isort", "flake8", "mypy", "types-setuptools"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["sr_ciden*"]
+
+[tool.black]
+line-length = 88
+target-version = ["py39"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+known_first_party = ["sr_ciden"]
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503"]
