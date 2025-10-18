@@ -1,0 +1,14 @@
+seed: 0
+readout:
+  lambda: 0.8
+  T: 1.0
+  lam_max: 1.2
+  runs: 500
+train:
+  B: 8
+  N: 64
+  T_end: 1.0
+  lr: 1.0e-3
+assumed_power_watts:
+  cpu: 30.0
+  gpu: 60.0

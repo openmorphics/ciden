@@ -6,17 +6,17 @@ build-backend = "setuptools.build_meta"
 name = "sr-ciden"
 version = "0.1.0"
 description = "Decoupled Continuous-Time Neuromorphic Library (C-IDEN with SR readout)"
-readme = "README.md"
-requires-python = ">=3.9"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.10"
 license = { file = "LICENSE" }
 authors = [{name = "The SR-CIDEN Authors", email = "oss@example.com"}]
 keywords = ["temporal point process", "neural ode", "neuromorphic", "spiking neural networks", "pytorch"]
 classifiers = [
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "License :: OSI Approved :: Apache Software License",
   "Operating System :: OS Independent",
   "Intended Audience :: Science/Research",
@@ -30,9 +30,38 @@ dependencies = [
   "tqdm>=4.65",
 ]
 
+[project.urls]
+Documentation = "https://openmorphics.github.io/ciden/"
+Paper = "https://github.com/openmorphics/ciden"
+Repository = "https://github.com/openmorphics/ciden"
+Issues = "https://github.com/openmorphics/ciden/issues"
+
 [project.optional-dependencies]
 torchdiffeq = ["torchdiffeq>=0.2.3"]
-dev = ["pytest", "pytest-cov", "black", "isort", "flake8", "mypy", "types-setuptools"]
+docs = [
+  "mkdocs>=1.6",
+  "mkdocs-material>=9.5",
+  "mkdocstrings[python]>=0.26",
+  "pymdown-extensions>=10.0",
+]
+dev = [
+  "pytest>=8",
+  "pytest-cov>=5",
+  "hypothesis>=6.98",
+  "ruff>=0.6",
+  "black>=24.0",
+  "isort>=5.13",
+  "mypy>=1.10",
+  "types-setuptools",
+  "pip-tools>=7.4",
+  "pre-commit>=3.7",
+  "nbconvert>=7.16",
+  "jupyter>=1.0",
+  "PyYAML>=6.0",
+  "pip-audit>=2.7",
+  "bandit>=1.7",
+  "nbstripout>=0.7",
+]
 
 [tool.setuptools]
 package-dir = {"" = "src"}
@@ -44,7 +73,7 @@ include = ["sr_ciden*"]
 
 [tool.black]
 line-length = 88
-target-version = ["py39"]
+target-version = ["py310"]
 
 [tool.isort]
 profile = "black"
@@ -54,3 +83,29 @@ known_first_party = ["sr_ciden"]
 [tool.flake8]
 max-line-length = 88
 extend-ignore = ["E203", "W503"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+src = ["src", "tests", "benchmarks", "examples"]
+extend-exclude = ["docs"]
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I", "UP", "PT", "Q", "SIM"]
+ignore = ["E203", "W503"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["sr_ciden"]
+profile = "black"
+line-length = 88
+
+[tool.mypy]
+python_version = "3.10"
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+no_implicit_optional = true
+check_untyped_defs = true
+ignore_missing_imports = true

@@ -1,4 +1,5 @@
 # sr-ciden — Decoupled Continuous-Time Neuromorphic Library (C-IDEN with SR readout)
+[![Docs](https://img.shields.io/badge/docs-mkdocs--material-brightgreen)](https://openmorphics.github.io/ciden/) [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
 sr-ciden is a research-oriented library for continuous-time neuromorphic modeling. It cleanly decouples training (exact likelihood over continuous time) from inference/readout (e.g., Sparse Regression via thinning), so you can swap readouts and diagnostic tools without entangling training dynamics.
 
@@ -127,6 +128,25 @@ if __name__ == "__main__":
   python benchmarks/benchmark_memory_and_speed.py
   ```
   See [benchmarks/benchmark_memory_and_speed.py](benchmarks/benchmark_memory_and_speed.py).
+
+## Reproducibility and one-shot artifacts
+
+- Reproduce all paper artifacts (examples + benchmarks + manifest):
+  ```bash
+  bash scripts/reproduce_paper.sh
+  ```
+  This writes metrics to [results/README.md](results/README.md:1) locations and figures/CSVs to [artifacts/figures/](artifacts/figures/:1). The script also captures the runtime environment to [artifacts/env.json](artifacts/env.json:1) and records the commit SHA.
+
+- Dataset cache root:
+  - Set SR_CIDEN_DATA to control where datasets are cached. Defaults to ~/.cache/sr_ciden.
+    ```bash
+    export SR_CIDEN_DATA=/path/to/datasets
+    ```
+  - See fetcher skeletons in [src/sr_ciden/data/fetchers.py](src/sr_ciden/data/fetchers.py:1). Replace placeholder URLs and checksums before camera-ready.
+
+- Environments:
+  - Conda: [environment.yml](environment.yml:1)
+  - Pip (locked): [requirements-lock.txt](requirements-lock.txt:1) (regenerate via pip-tools)
 
 ## API
 

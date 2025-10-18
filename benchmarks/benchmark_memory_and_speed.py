@@ -16,7 +16,17 @@ import sys
 import time
 from typing import List, Tuple
 
+import json
 import torch
+
+# Determinism utilities (support both installed and source layout)
+try:
+    from sr_ciden.utils.determinism import seed_all, capture_env
+except Exception:
+    import sys as _sys
+    import os as _os
+    _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), "..", "src"))
+    from sr_ciden.utils.determinism import seed_all, capture_env
 
 # Ensure local editable install or source layout works
 try:
@@ -69,10 +79,10 @@ def _generate_dummy_events(T: float, K: int = 1, num_events: int = 3, device=Non
     return times, marks
 
 
-def benchmark_adjoint_memory() -> None:
+def benchmark_adjoint_memory() -> dict:
     if not torch.cuda.is_available():
         print("Adjoint Memory Scaling: CUDA GPU not available. Skipping.")
-        return
+        return {"task": "adjoint_memory", "skipped": "no_cuda"}
 
     device = torch.device("cuda")
     cfg = ODESolverConfig(use_adjoint=True)
@@ -106,9 +116,10 @@ def benchmark_adjoint_memory() -> None:
 
     print("=== Adjoint Memory Scaling (GPU) ===")
     print(_format_table(["Horizon (T)", "Peak GPU Memory (MB)"], rows))
+    return {"task": "adjoint_memory", "rows": rows}
 
 
-def benchmark_thinning_efficiency() -> None:
+def benchmark_thinning_efficiency() -> dict:
     # Constant per-mark intensities; true maximum of the total rate is 0.7
     true_max = 0.7
 
@@ -126,9 +137,10 @@ def benchmark_thinning_efficiency() -> None:
 
     print("=== Thinning Efficiency (Ogata) ===")
     print(_format_table(["λ_max Tightness", "Acceptance Ratio"], rows))
+    return {"task": "thinning_efficiency", "rows": rows}
 
 
-def benchmark_training_throughput() -> None:
+def benchmark_training_throughput() -> dict:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     B = 32
     K = 2
@@ -181,6 +193,13 @@ def benchmark_training_throughput() -> None:
     device_str = "CUDA" if device.type == "cuda" else "CPU"
     print(f"=== Training Throughput ({device_str}) ===")
     print(f"Processed {total_events} events in {elapsed:.3f} s &#45;> {eps:,.0f} events/second")
+    return {
+        "task": "training_throughput",
+        "events_per_second": float(eps),
+        "elapsed_sec": float(elapsed),
+        "total_events": int(total_events),
+        "device": device_str,
+    }
 
 
 def main() -> None:
@@ -193,12 +212,35 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    # Determinism, env capture, and output dirs
+    seed_all(0)
+    os.makedirs("results", exist_ok=True)
+    os.makedirs(os.path.join("artifacts", "profiles"), exist_ok=True)
+    env = capture_env(os.path.join("artifacts", "env.json"))
+
+    results = {}
     if args.bench in ("all", "memory"):
-        benchmark_adjoint_memory()
+        results["memory"] = benchmark_adjoint_memory()
     if args.bench in ("all", "efficiency"):
-        benchmark_thinning_efficiency()
+        results["efficiency"] = benchmark_thinning_efficiency()
     if args.bench in ("all", "speed"):
-        benchmark_training_throughput()
+        results["speed"] = benchmark_training_throughput()
+
+    payload = {
+        "task": "benchmarks",
+        "seed": 0,
+        "commit": (env.get("git", {}) or {}).get("commit"),
+        "env": {
+            "platform": env.get("platform"),
+            "python": env.get("python"),
+            "versions": env.get("versions"),
+            "torch": env.get("torch"),
+        },
+        "metrics": results,
+    }
+    out_name = "benchmarks_all.json" if args.bench == "all" else f"benchmark_{args.bench}.json"
+    with open(os.path.join("results", out_name), "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2, sort_keys=True)
 
 
 if __name__ == "__main__":

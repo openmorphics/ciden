@@ -1,0 +1,24 @@
+{
+  "title": "SR-CIDEN: Decoupled Continuous-Time Neuromorphic Modeling with Sparse Readout",
+  "upload_type": "software",
+  "description": "Decoupled continuous-time neuromorphic library (C-IDEN with SR readout). Training uses exact continuous-time likelihoods; inference uses forward-only intensity functions, enabling interchangeable readouts and diagnostics.",
+  "creators": [
+    { "name": "The SR-CIDEN Authors" }
+  ],
+  "license": "Apache-2.0",
+  "access_right": "open",
+  "keywords": [
+    "temporal point process",
+    "neural ODE",
+    "neuromorphic",
+    "spiking neural networks",
+    "pytorch"
+  ],
+  "related_identifiers": [
+    {
+      "relation": "isSupplementTo",
+      "identifier": "https://github.com/openmorphics/ciden",
+      "scheme": "url"
+    }
+  ]
+}

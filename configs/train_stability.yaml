@@ -1,0 +1,14 @@
+seed: 0
+device: auto   # auto | cpu | cuda
+epochs: 25
+batch:
+  B: 16
+  K: 2
+  N: 64
+  T_end: 1.0
+solver:
+  method: rk4
+  dt: 1.0e-2
+  use_adjoint: false
+opt:
+  lr: 3.0e-3

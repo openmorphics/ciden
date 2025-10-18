@@ -7,14 +7,21 @@ This script demonstrates the decoupled API:
 - Inference uses model.get_intensity_fn() with sampling utilities in sr_ciden.readout.
 """
 import torch
+import os
+import json
 import sr_ciden
 from sr_ciden.adapters import CIDENContinuous
 from sr_ciden.solvers import ODESolverConfig
 from sr_ciden.readout import sample_ogata, sample_bernoulli
+from sr_ciden.validation import time_rescaling_test
+from sr_ciden.utils.determinism import seed_all, capture_env
 
 
 def main() -> None:
-    torch.manual_seed(0)
+    # Determinism and environment capture
+    seed_all(0)
+    os.makedirs("artifacts/examples", exist_ok=True)
+    capture_env(os.path.join("artifacts", "env.json"))
 
     # Instantiate model (1 mark)
     model = CIDENContinuous(
@@ -53,6 +60,17 @@ def main() -> None:
 
     print("Note: readout functions do not support gradients and operate on the decoupled intensity_fn.")
 
+    # Time-rescaling diagnostic and structured output
+    result = time_rescaling_test(intensity_fn, dummy_events)
+    out = {
+        "task": "example_minimal_training_loop",
+        "seed": 0,
+        "metrics": {
+            "ks_p_value": float(result.get("p_value", float("nan")))
+        }
+    }
+    with open(os.path.join("artifacts", "examples", "minimal_training_loop.json"), "w", encoding="utf-8") as f:
+        json.dump(out, f, indent=2, sort_keys=True)
 
 if __name__ == "__main__":
     main()

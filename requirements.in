@@ -1,0 +1,8 @@
+# Runtime requirements (pinned). Compile with:
+#   pip-compile --generate-hashes --resolver=backtracking requirements.in -o requirements-lock.txt
+torch==2.3.1
+numpy==1.26.4
+scipy==1.11.4
+matplotlib==3.8.4
+tqdm==4.66.4
+torchdiffeq==0.2.3

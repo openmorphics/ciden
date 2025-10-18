@@ -1,0 +1,8 @@
+seed: 0
+t_horizon: 3.0
+poisson:
+  lambda: 0.8
+sinusoid:
+  lambda0: 0.8
+  amplitude: 0.5
+  freq_hz: 1.0

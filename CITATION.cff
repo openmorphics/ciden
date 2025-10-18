@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "SR-CIDEN: Decoupled Continuous-Time Neuromorphic Modeling with Sparse Readout"
+type: software
+version: "0.1.0"
+authors:
+  - name: "The SR-CIDEN Authors"
+year: 2025
+date-released: 2025-10-16
+license: Apache-2.0
+repository-code: "https://github.com/openmorphics/ciden"
+url: "https://github.com/openmorphics/ciden"
+contact:
+  - name: "The SR-CIDEN Authors"
+    email: "oss@example.com"
+keywords:
+  - temporal point process
+  - neural ode
+  - neuromorphic
+  - spiking neural networks
+  - pytorch

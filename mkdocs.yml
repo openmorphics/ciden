@@ -1,0 +1,85 @@
+site_name: "SR-CIDEN"
+site_description: "Decoupled Continuous-Time Neuromorphic Library (C-IDEN with SR readout)"
+site_url: "https://openmorphics.github.io/ciden/"
+repo_url: "https://github.com/openmorphics/ciden"
+repo_name: "openmorphics/ciden"
+
+theme:
+  name: "material"
+  features:
+    - content.code.copy
+    - navigation.instant
+    - navigation.tabs
+    - navigation.tracking
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+  palette:
+    - scheme: default
+      primary: blue
+      accent: indigo
+    - scheme: slate
+      primary: blue
+      accent: indigo
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          setup_commands:
+            - "import sys, os"
+            - "sys.path.insert(0, os.path.abspath('src'))"
+          options:
+            docstring_style: google
+            show_root_heading: true
+            show_source: false
+            merge_init_into_class: true
+            separate_signature: true
+            signature_crossrefs: true
+            filters: ["!^_"]
+            typehints_in_signature: true
+            inherited_members: true
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+nav:
+  - Home: index.md
+  - Concepts:
+      - Architecture: ARCHITECTURE.md
+  - API:
+      - API Overview: API.md
+  - Academy:
+      - Overview: academy/OVERVIEW.md
+      - 01 Prerequisites: academy/01_prerequisites.md
+      - 02 Neuron Models: academy/02_neuron_models.md
+      - 03 Synapses & Plasticity: academy/03_synapses_plasticity.md
+      - 04 Temporal Encoding: academy/04_temporal_encoding.md
+      - 05 Spike Learning Rules: academy/05_spike_learning_rules.md
+      - 06 TPP & C-IDEN Theory: academy/06_tpp_and_ciden_theory.md
+      - 07 SR Readout & Thinning: academy/07_sr_readout_and_thinning.md
+      - 08 Frameworks Overview & Comparison: academy/08_frameworks_overview_and_comparison.md
+      - 09 Integration Guides: academy/09_integration_guides.md
+      - 10 Applications & Case Studies: academy/10_applications_and_case_studies.md
+      - 11 Hardware Deployment & Energy: academy/11_hardware_deployment_and_energy.md
+      - 12 Evaluation Metrics: academy/12_evaluation_metrics.md
+      - 13 Reproducibility & Setups: academy/13_reproducibility_and_setups.md
+      - 14 Learning Pathways: academy/14_learning_pathways.md
+      - References: academy/REFERENCES.md
+
+docs_dir: docs
